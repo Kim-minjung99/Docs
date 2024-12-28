@@ -11,9 +11,24 @@
   "side_panel": {
     "default_path": "./src/index.html"
   },
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "js": [
+        "node_modules/jquery/dist/jquery.min.js",
+        "./src/js/contentscript.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    } 
+  ],
+  "background": {
+      "service_worker": "./src/js/background.js"
+  },
   "action" : {
     "default_title" : "Docs",
     "default_popup" : "./src/popup.html"
   },
-  "permissions": ["sidePanel", "storage", "alarms", "notifications"]
+  "permissions": ["activeTab", "sidePanel"]
 }
