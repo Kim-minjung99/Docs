@@ -12,7 +12,7 @@ const init = () => {
 
 const createDraggableElement = () => {
     // create draggable content
-    const elements = $("div");
+    const elements = $("span");
     elements.each((idx, ele)=>{
         console.log("ele::", ele);
         $(ele).attr('draggable', 'true');
@@ -20,9 +20,9 @@ const createDraggableElement = () => {
 }
 
 const eventListener = () => {
-    // container2.addEventListener("dragover", (e) => {
-    //     console("드래그 요소가 이 영역에 위에 계속 위치하면 발생하는 이벤트");
-        
-    //   });
+    $('[draggable="true"]').on("dragstart", (e) => {
+        e.dataTransfer = e.originalEvent.dataTransfer;
+        e.dataTransfer.setData('data', "dropped text"); // 문자열 전달
+    });
 }
 
