@@ -20,9 +20,17 @@ const createDraggableElement = () => {
 }
 
 const eventListener = () => {
-    $('[draggable="true"]').on("dragstart", (e) => {
+    // this scope
+    $('[draggable="true"]').on("dragstart", function (e) {
         e.dataTransfer = e.originalEvent.dataTransfer;
-        e.dataTransfer.setData('data', "dropped text"); // 문자열 전달
+        e.dataTransfer.setData('data', this.innerHTML); // this는 드래그된 요소를 참조
+        
+        // container add
+        // content-script.js
+        const dataToSend = { message: "Hello from content-script!", details: "Extra information" };
+
+        // Send message to background script
+        chrome.runtime.sendMessage({ type: "DATA_FROM_CONTENT", payload: dataToSend });
     });
 }
 
