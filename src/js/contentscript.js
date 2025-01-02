@@ -4,6 +4,7 @@ $(function(){
 });
 
 const elementList = [];
+const port = chrome.runtime.connect({ name: "DOCS-PORT" });    // PORT
 
 const init = () => {
     createDraggableElement();
@@ -22,15 +23,26 @@ const createDraggableElement = () => {
 const eventListener = () => {
     // this scope
     $('[draggable="true"]').on("dragstart", function (e) {
-        e.dataTransfer = e.originalEvent.dataTransfer;
-        e.dataTransfer.setData('data', this.innerHTML); // this는 드래그된 요소를 참조
-        
         // container add
-        // content-script.js
-        const dataToSend = { message: "Hello from content-script!", details: "Extra information" };
-
+        const dataToSend = { type: "DRAG_DATA", payload: this };
         // Send message to background script
-        chrome.runtime.sendMessage({ type: "DATA_FROM_CONTENT", payload: dataToSend });
+        chrome.runtime.sendMessage(dataToSend, (response)=>{
+            console.log("contentScript response:::", response);
+        });
+
     });
+
+    // chrome.runtime.onConnect.addListener((port) => {
+    //     console.log(`Port connected: ${port.name}`);
+    
+    //     port.onMessage.addListener((msg) => {
+    //         console.log(`Message received from ${port.name}:`, msg);
+    //     });
+    
+    //     port.onDisconnect.addListener(() => {
+    //         console.log(`Port disconnected: ${port.name}`);
+    //     });
+    // });
+    
 }
 
