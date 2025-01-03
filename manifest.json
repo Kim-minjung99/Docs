@@ -30,5 +30,5 @@
     "default_title" : "Docs",
     "default_popup" : "./src/popup.html"
   },
-  "permissions": ["activeTab", "sidePanel", "storage"]
+  "permissions": ["activeTab", "sidePanel", "storage", "tabs"]
 }

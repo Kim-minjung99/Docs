@@ -1,10 +1,10 @@
 $(function(){
     console.log("jquery::",jQuery);
     init();
-});
+})
 
 const elementList = [];
-const port = chrome.runtime.connect({ name: "DOCS-PORT" });    // PORT
+// const port = chrome.runtime.connect({ name: "DOCS-PORT" });    // PORT
 
 const init = () => {
     createDraggableElement();
@@ -15,7 +15,7 @@ const createDraggableElement = () => {
     // create draggable content
     const elements = $("span");
     elements.each((idx, ele)=>{
-        console.log("ele::", ele);
+        // console.log("ele::", ele);
         $(ele).attr('draggable', 'true');
     })
 }
@@ -27,22 +27,18 @@ const eventListener = () => {
         const dataToSend = { type: "DRAG_DATA", payload: this };
         // Send message to background script
         chrome.runtime.sendMessage(dataToSend, (response)=>{
-            console.log("contentScript response:::", response);
+            
+            // error
+            if(chrome.runtime.lastError){
+                alert("메세지 에러 발생::", chrome.runtime.lastError.message);
+            }
+
+            if(response.status == "success"){
+                console.log("contentScript response:::", response);
+            }
         });
 
     });
 
-    // chrome.runtime.onConnect.addListener((port) => {
-    //     console.log(`Port connected: ${port.name}`);
-    
-    //     port.onMessage.addListener((msg) => {
-    //         console.log(`Message received from ${port.name}:`, msg);
-    //     });
-    
-    //     port.onDisconnect.addListener(() => {
-    //         console.log(`Port disconnected: ${port.name}`);
-    //     });
-    // });
-    
 }
 
