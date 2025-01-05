@@ -4,6 +4,7 @@ $(function(){
 })
 
 const elementList = [];
+var elementNum = 0;
 // const port = chrome.runtime.connect({ name: "DOCS-PORT" });    // PORT
 
 const init = () => {
@@ -23,14 +24,22 @@ const createDraggableElement = () => {
 const eventListener = () => {
     // this scope
     $('[draggable="true"]').on("dragstart", function (e) {
+
+        this.id = `draggedCont${elementNum}`
+
+        elementNum++;
+        
         // container add
-        const dataToSend = { type: "DRAG_DATA", payload: this };
+        const dataToSend = { type: "DRAG_DATA", payload: $(this).text() };
         // Send message to background script
         chrome.runtime.sendMessage(dataToSend, (response)=>{
+
+            console.log("sendMessage");
             
             // error
             if(chrome.runtime.lastError){
                 alert("메세지 에러 발생::", chrome.runtime.lastError.message);
+                return;
             }
 
             if(response.status == "success"){
