@@ -5,7 +5,6 @@ $(function(){
 
 const elementList = [];
 var elementNum = 0;
-// const port = chrome.runtime.connect({ name: "DOCS-PORT" });    // PORT
 
 const init = () => {
     createDraggableElement();
@@ -21,16 +20,35 @@ const createDraggableElement = () => {
     })
 }
 
+// data to base64
+const toDataURL = (url) => 
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => new Promise((resolve, reject)=>{
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+        }));
+
+
 const eventListener = () => {
-    // this scope
+
     $('[draggable="true"]').on("dragstart", function (e) {
 
-        this.id = `draggedCont${elementNum}`
+        let sendData = '';
 
+        this.id = `draggedCont${elementNum}`
         elementNum++;
+
+        if($(this).prop('nodeName') === "IMG"){
+            sendData = $(this).attr("src");
+        }else{
+            sendData = $(this).text();
+        }
         
         // container add
-        const dataToSend = { type: "DRAG_DATA", payload: $(this).text() };
+        const dataToSend = { type: "DRAG_DATA", payload: sendData };
         // Send message to background script
         chrome.runtime.sendMessage(dataToSend, (response)=>{
 

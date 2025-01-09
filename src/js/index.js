@@ -2,19 +2,18 @@ $(function(){
     init();
 });
 
+chrome.runtime.connect({ name: "DOCS-SIDEPANEL-PORT" });    // PORT
+
 const init = () => {
     eventListener();
 }
 
 const eventListener = () => {
-
     
     $("#draw-container").on("dragover", (e) => {
         e.dataTransfer = e.originalEvent.dataTransfer;
         e.preventDefault();
     });
-
-    
 
     $("#draw-container").on("drop", (e) => {
         e.dataTransfer = e.originalEvent.dataTransfer;
